@@ -13,7 +13,7 @@ from telegram.ext import (
 )
 
 from threading import Thread
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from time import sleep
 import asyncio
 
@@ -37,7 +37,8 @@ markup_start = ReplyKeyboardMarkup(keyboard_start, one_time_keyboard=True)
 markup_normal = ReplyKeyboardMarkup(keyboard_normal, one_time_keyboard=True)
 
 async def schedule_checker_and_poster(context: ContextTypes.DEFAULT_TYPE):
-    now = datetime.now()
+    offset = timedelta(hours=3)
+    now = datetime.now().astimezone(timezone(offset))
     current_time = now.strftime("%H:%M")
     print(current_time)
     for post in scheduled_posts:
