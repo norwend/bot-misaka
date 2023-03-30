@@ -93,7 +93,7 @@ async def post(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     post_text, post_photo = utils.parse_post(post_id, VK_TOKEN)
 
-    scheduled_posts.append(Post(post_text, post_photo, time, context.bot))
+    scheduled_posts.append(Post(post_text, post_photo, time))
 
     del context.user_data["post_id"]
 
