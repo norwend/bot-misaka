@@ -58,6 +58,12 @@ async def schedule_checker_and_poster(context: ContextTypes.DEFAULT_TYPE):
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    username = update.message.from_user["username"]
+    if username != "norwendus" and username != "Momichev":
+        await update.message.reply_text(
+            text="Пошёл нахуй чёрт ебаный"
+        )
+        return ConversationHandler.END
     await update.message.reply_text(
         text="Жми на кнопку",
         reply_markup=markup_start
