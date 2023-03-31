@@ -1,5 +1,5 @@
 import random
-import json, requests
+import requests
 
 def get_random_post_id(group_id: int, token: str) -> str:
     url = "https://api.vk.com/method/wall.get?access_token=" + token
@@ -27,6 +27,8 @@ def parse_post(post_id: str, token: str) -> tuple[str, str]:
         "posts": post_id
     }
     req = requests.post(url, params = data).json()["response"][0]
+    if len(req["text"]) >= 4000:
+        req["text"] = req["text"][0:4000]
     if "photo" in req["attachments"][0]:
         return req["text"], req["attachments"][0]["photo"]["sizes"][-1]["url"]
     else:

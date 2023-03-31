@@ -1,5 +1,0 @@
-config_file = open("config.txt")
-TOKEN = config_file.readline().strip()
-CHANNEL_ID = config_file.readline().strip()
-GROUP_ID = config_file.readline().strip()
-VK_TOKEN = config_file.readline().strip()

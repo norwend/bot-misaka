@@ -1,9 +1,8 @@
 import logging
 from typing import Dict
 
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, Bot
+from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import (
-    Application,
     ApplicationBuilder,
     CommandHandler,
     ContextTypes,
@@ -12,19 +11,21 @@ from telegram.ext import (
     filters,
 )
 
-from threading import Thread
 from datetime import datetime, timezone, timedelta
-from time import sleep
-import asyncio
 
 import utils
-from config import *
 from post import Post
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
+
+config_file = open("config.txt")
+TOKEN = config_file.readline().strip()
+CHANNEL_ID = config_file.readline().strip()
+GROUP_ID = config_file.readline().strip()
+VK_TOKEN = config_file.readline().strip()
 
 scheduled_posts = []
 
@@ -129,7 +130,8 @@ if __name__ == '__main__':
                 MessageHandler(filters.Regex("^(Случайный пост)$"), choosing)
             ],
             POST_QUEUEING: [
-                MessageHandler(filters.TEXT, post)
+                MessageHandler(filters.Regex("^(\d\d:\d\d)$"), post),
+                MessageHandler(filters.TEXT, queueing),
             ],
             TIME_SELECTED: [
                 MessageHandler(filters.Regex("^(Случайный пост)$"), choosing)
