@@ -60,8 +60,13 @@ async def schedule_checker_and_poster(context: ContextTypes.DEFAULT_TYPE):
 
 async def show_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for post in scheduled_posts:
+        msg = "Время: " + post.time
+        if len(post.text) > 0:
+            msg += '\n' + post.text
+        if len(post.img_url) > 0:
+            msg += '\n' + post.img_url
         await update.message.reply_text(
-            text="Время: " + post.time + '\n\n' + post.text + '\n\n' + post.img_url,
+            text=msg,
             reply_markup=markup_start
         )
     return CHOOSING
