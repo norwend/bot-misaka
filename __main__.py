@@ -61,6 +61,10 @@ async def schedule_checker_and_poster(context: ContextTypes.DEFAULT_TYPE):
             scheduled_posts.remove(post)
 
 async def show_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if len(scheduled_posts) == 0:
+        await update.message.reply_text(
+            text="В отложке ничего нет"
+        )
     for post in scheduled_posts:
         msg = "Время: " + post.time
         if len(post.text) > 0:
