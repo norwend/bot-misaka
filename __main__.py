@@ -28,6 +28,8 @@ GROUP_ID = config_file.readline().strip()
 VK_TOKEN = config_file.readline().strip()
 WHITELIST = config_file.readline().strip().split(' ')
 
+group = utils.Group(GROUP_ID, VK_TOKEN)
+
 scheduled_posts = []
 
 CHOOSING, POST_QUEUEING, TIME_SELECTED = range(3)
@@ -62,9 +64,9 @@ async def show_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for post in scheduled_posts:
         msg = "Время: " + post.time
         if len(post.text) > 0:
-            msg += '\n' + post.text
+            msg += "\n\n" + post.text
         if len(post.img_url) > 0:
-            msg += '\n' + post.img_url
+            msg += "\n\n" + post.img_url
         await update.message.reply_text(
             text=msg,
             reply_markup=markup_start
@@ -85,7 +87,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return CHOOSING
 
 async def choosing(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    post_id = utils.get_random_post_id(GROUP_ID, VK_TOKEN)
+    post_id = group.get_random_post_id()
     post_url = utils.get_post_url(post_id)
     context.user_data["post_id"] = post_id
     await update.message.reply_text(
@@ -104,7 +106,7 @@ async def post(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     time = update.message.text
     post_id = context.user_data["post_id"]
 
-    post_text, post_photo = utils.parse_post(post_id, VK_TOKEN)
+    post_text, post_photo = group.parse_post(post_id)
 
     scheduled_posts.append(Post(post_text, post_photo, time))
 
